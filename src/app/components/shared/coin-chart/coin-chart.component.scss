@@ -1,0 +1,19 @@
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    width: 100%;
+}
+
+#coinChartCanvas {
+    max-width: 85%; // Make width responsive
+    height: auto; // Adjust height based on aspect ratio
+    min-height: 300px; // Set a minimum height
+}
+
+.container-coins {
+    width: 90%;
+    margin: 0 auto;
+}

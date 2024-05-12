@@ -1,0 +1,73 @@
+<div class="chart-container">
+    <canvas id="coinChartCanvas"></canvas>
+</div>
+
+<div class="container-coins">
+    <div class="hidden sm:hidden md:hidden lg:block">
+        <div class="overflow-x-auto relative shadow-md sm:rounded-lg my-8">
+            <table class="min-w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                    <tr>
+                        <th scope="col" class="py-3 px-6">Image</th>
+                        <th scope="col" class="py-3 px-6">Name</th>
+                        <th scope="col" class="py-3 px-6">Symbol</th>
+                        <th scope="col" class="py-3 px-6">Current Price</th>
+                        <th scope="col" class="py-3 px-6">Market Cap</th>
+                        <th scope="col" class="py-3 px-6">24h High</th>
+                        <th scope="col" class="py-3 px-6">24h Low</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let coin of visibleCoins; let i = index"
+                        [ngClass]="{'bg-white': i % 2 === 0, 'bg-gray-50': i % 2 !== 0}"
+                        class="border-b dark:border-gray-700">
+                        <td class="py-4 px-6">
+                            <img class="h-10 w-10 rounded-full" [src]="coin.image" alt="{{ coin.name }}">
+                        </td>
+                        <td class="py-4 px-6 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                            {{ coin.name }}</td>
+                        <td class="py-4 px-6">{{ coin.symbol.toUpperCase() }}</td>
+                        <td class="py-4 px-6">${{ coin.currentPrice | number }}</td>
+                        <td class="py-4 px-6">${{ coin.marketCap | number }}</td>
+                        <td class="py-4 px-6">${{ coin.high24h | number }}</td>
+                        <td class="py-4 px-6">${{ coin.low24h | number }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <div class="block lg:hidden">
+        <div class="my-4" *ngFor="let coin of visibleCoins; let i = index">
+            <div class="p-4 bg-white shadow rounded-lg mb-4" [ngClass]="{'bg-gray-50': i % 2 !== 0}">
+                <div class="flex items-center space-x-3">
+                    <img class="h-10 w-10 rounded-full" [src]="coin.image" alt="{{ coin.name }}">
+                    <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-gray-900 truncate dark:text-white">
+                            {{ coin.name }}
+                        </p>
+                        <p class="text-sm text-gray-500 truncate dark:text-gray-400">
+                            {{ coin.symbol.toUpperCase() }}
+                        </p>
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        Price: ${{ coin.currentPrice | number }}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        Market Cap: ${{ coin.marketCap | number }}
+                    </p>
+                    <p class="text-sm text-gray-500 dark:text-gray-400">
+                        24h High: ${{ coin.high24h | number }} / Low: ${{ coin.low24h | number }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-center items-center p-4">
+        <button class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" (click)="loadMore()"
+            *ngIf="currentIndex < coins.length">
+            Load More
+        </button>
+    </div>
+</div>

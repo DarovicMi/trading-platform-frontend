@@ -1,0 +1,12 @@
+.color-red {
+    color: red;
+}
+
+.relative .error-message {
+    position: absolute;
+    right: -3rem;
+    top: 0;
+    width: 50%;
+    font-size: 0.60rem;
+    color: red;
+}

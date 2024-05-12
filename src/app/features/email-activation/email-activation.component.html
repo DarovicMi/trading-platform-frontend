@@ -1,0 +1,51 @@
+<section class="bg-gray-100 flex justify-center flex-col gap-5 items-center h-screen">
+    <div *ngIf="isActivateClicked && isActivationSuccessful"
+        class="w-50 justify-center flex items-center p-6 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+        role="alert">
+        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+        </svg>
+        <span class="sr-only">Info</span>
+        <div> {{activationMessage}}, you will be redirected to login page in
+            <span>{{countdown}}...</span>
+        </div>
+    </div>
+    <div *ngIf="isActivateClicked && !isActivationSuccessful && !isReissueTokenClicked"
+        class="w-50 justify-center flex items-center p-6 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
+        role="alert">
+        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+        </svg>
+        <span class="sr-only">Info</span>
+        <div> {{errorMessage}} <span><button (click)="reissueActivationToken()"
+                    class="text-blue-700 border focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2 dark:border-blue-500 dark:text-blue-500 dark:hover:text-white dark:hover:bg-blue-500 dark:focus:ring-blue-800"
+                    *ngIf="errorMessage === 'Invalid or expired activation token.' && !isReissueTokenClicked">Reissue
+                    Token</button></span>
+        </div>
+    </div>
+    <div *ngIf="isReissueTokenClicked"
+        [ngClass]="{'text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400': activationMessage === 'Too many attempts, please try again later.'}"
+        class="w-50 justify-center flex items-center p-6 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
+        role="alert">
+        <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
+            fill="currentColor" viewBox="0 0 20 20">
+            <path
+                d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
+        </svg>
+        <span class="sr-only">Info</span>
+        <div> {{activationMessage}}</div>
+    </div>
+    <div class="bg-white p-8 rounded-lg shadow-md">
+        <h1 class="text-2xl mb-4 text-center">Activate Your Account</h1>
+        <p class="text-gray-700 text-center mb-6">Please click the button below to activate your account</p>
+        <div class="flex justify-center">
+            <button (click)="onActivateAccount()"
+                class="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Activate
+                Account</button>
+        </div>
+    </div>
+</section>
