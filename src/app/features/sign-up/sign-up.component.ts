@@ -10,6 +10,8 @@ import { User } from '../../entities/User';
 import { HttpClientModule } from '@angular/common/http';
 import { LocalStorageService } from '../../services/local-storage.service';
 import { RouterModule } from '@angular/router';
+import { Validation } from '../../utils/constants/user-validation';
+import { NotificationService } from '../../services/notification.service';
 
 @Component({
   selector: 'cc-sign-up',
@@ -24,11 +26,14 @@ export class SignUpComponent {
   public hide: boolean = true;
   public isSubmitting = false;
   public isFormSubmitted = false;
+  public userValidation = Validation;
+  public userValidators = UserValidators;
 
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private notificationService: NotificationService
   ) {
     this.signupForm = this.fb.group({
       username: [
@@ -114,11 +119,11 @@ export class SignUpComponent {
       const newUser = new User(
         username,
         email,
-        password,
         firstName,
         lastName,
         phoneNumber,
-        country
+        country,
+        password
       );
 
       setTimeout(() => {
@@ -127,14 +132,21 @@ export class SignUpComponent {
             this.isFormSubmitted = true;
             this.isSubmitting = false;
             this.localStorageService.setItem('userEmail', email);
+            this.notificationService.success(
+              this.userValidation.signUp.successSignup,
+              6000
+            );
             this.resetForm();
           },
-          error: (error) => {
-            console.error('Signup failed:', error);
+          error: () => {
             this.isSubmitting = false;
+            this.notificationService.error(
+              this.userValidation.signUp.errorSignup,
+              6000
+            );
           },
         });
-      }, 2000);
+      }, 3000);
     }
   }
 

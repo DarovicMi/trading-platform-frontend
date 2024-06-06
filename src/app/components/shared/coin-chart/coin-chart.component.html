@@ -12,13 +12,14 @@
                         <th scope="col" class="py-3 px-6">Name</th>
                         <th scope="col" class="py-3 px-6">Symbol</th>
                         <th scope="col" class="py-3 px-6">Current Price</th>
+                        <th scope="col" class="py-3 px-6"></th>
                         <th scope="col" class="py-3 px-6">Market Cap</th>
                         <th scope="col" class="py-3 px-6">24h High</th>
                         <th scope="col" class="py-3 px-6">24h Low</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <tr *ngFor="let coin of visibleCoins; let i = index"
+                    <tr *ngFor="let coin of visibleCoins; let i = index" (click)="navigateToCoin(coin.coinId)"
                         [ngClass]="{'bg-white': i % 2 === 0, 'bg-gray-50': i % 2 !== 0}"
                         class="border-b dark:border-gray-700">
                         <td class="py-4 px-6">
@@ -28,6 +29,8 @@
                             {{ coin.name }}</td>
                         <td class="py-4 px-6">{{ coin.symbol.toUpperCase() }}</td>
                         <td class="py-4 px-6">${{ coin.currentPrice | number }}</td>
+                        <td class="py-4 px-6"> <cc-buy-crypto-currency-modal
+                                [coin]="coin"></cc-buy-crypto-currency-modal> </td>
                         <td class="py-4 px-6">${{ coin.marketCap | number }}</td>
                         <td class="py-4 px-6">${{ coin.high24h | number }}</td>
                         <td class="py-4 px-6">${{ coin.low24h | number }}</td>

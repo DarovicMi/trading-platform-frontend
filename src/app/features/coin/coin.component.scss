@@ -1,0 +1,24 @@
+
+.chart-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60%;
+    width: 100%;
+    margin-top: 2rem;
+    padding: 2rem;
+    background-color: #f8fafc;
+    border-radius: 0.5rem;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+}
+
+#coinChartCanvas {
+    max-width: 85%;
+    height: auto;
+    min-height: 300px;
+}
+
+.container-coins {
+    width: 90%;
+    margin: 0 auto;
+}

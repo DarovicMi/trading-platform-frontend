@@ -1,28 +1,75 @@
-import { Component, OnInit, HostListener } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  HostListener,
+  OnDestroy,
+  Input,
+} from '@angular/core';
 import { CoinService } from '../../../services/coin.service';
 import { Coin } from '../../../entities/Coin';
 import { ChartConfiguration, Chart, registerables } from 'chart.js';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
+import { Subscription } from 'rxjs';
+import { interval } from 'rxjs';
+import { NotificationService } from '../../../services/notification.service';
+import { Validation } from '../../../utils/constants/user-validation';
+import { BuyCryptoCurrencyModalComponent } from '../../layout/modals/buy-crypto-currency-modal/buy-crypto-currency-modal.component';
 
 @Component({
   selector: 'cc-coin-chart',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, BuyCryptoCurrencyModalComponent],
   templateUrl: './coin-chart.component.html',
   styleUrl: './coin-chart.component.scss',
 })
-export class CoinChartComponent implements OnInit {
+export class CoinChartComponent implements OnInit, OnDestroy {
   public chart: Chart | null = null;
   public coins: Coin[] = [];
   public visibleCoins: Coin[] = [];
   public currentIndex: number = 10;
 
-  constructor(private coinService: CoinService) {
+  private updateSubscription: Subscription;
+
+  constructor(
+    private coinService: CoinService,
+    private router: Router,
+    private notificationService: NotificationService
+  ) {
     Chart.register(...registerables);
   }
 
   ngOnInit(): void {
-    this.fetchAndBuildChart();
+    this.updateCoins();
+    this.startAutoUpdate();
+  }
+
+  ngOnDestroy(): void {
+    if (this.updateSubscription) {
+      this.updateSubscription.unsubscribe();
+    }
+  }
+
+  startAutoUpdate(): void {
+    const updateInterval = 150000;
+    this.updateSubscription = interval(updateInterval).subscribe(() => {
+      this.updateCoins();
+    });
+  }
+
+  updateCoins(): void {
+    this.coinService.updateCoins().subscribe({
+      next: () => {
+        this.fetchAndBuildChart();
+      },
+      error: () => {
+        //   this.notificationService.error(Validation.coin.failedToUpdateCoins);
+      },
+    });
+  }
+
+  navigateToCoin(coinId: string) {
+    this.router.navigate(['/coins', coinId]);
   }
 
   private fetchAndBuildChart(): void {
@@ -34,7 +81,8 @@ export class CoinChartComponent implements OnInit {
           this.buildChart(coins);
         }
       },
-      error: (error) => console.error('Error fetching coin data:', error),
+      error: () =>
+        this.notificationService.error(Validation.coin.failedToFetchCoins),
     });
   }
 

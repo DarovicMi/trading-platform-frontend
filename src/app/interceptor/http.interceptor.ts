@@ -5,51 +5,82 @@ import {
   HttpHandler,
   HttpRequest,
   HttpErrorResponse,
+  HttpClient,
 } from '@angular/common/http';
-import { Observable, throwError as observableThrowError } from 'rxjs';
+import {
+  Observable,
+  throwError as observableThrowError,
+  switchMap,
+} from 'rxjs';
 import { catchError } from 'rxjs/operators';
 import { Router } from '@angular/router';
+import { environment } from '../../environments/environment';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
-  constructor(private router: Router) {}
+  public apiUrl = environment.API_URL;
+  constructor(private router: Router, private http: HttpClient) {}
 
-  intercept(
-    req: HttpRequest<any>,
-    next: HttpHandler
-  ): Observable<HttpEvent<any>> {
+  intercept(req: HttpRequest<any>, next: HttpHandler): Observable<any> {
     const modifiedReq = req.clone({
       withCredentials: true,
-      headers: req.headers.set('x_cg_demo_api_key', 'your-api-key-here'),
     });
 
     return next.handle(modifiedReq).pipe(
       catchError((error: HttpErrorResponse) => {
-        let errorMsg = `Error Code: ${error.status},  Message: ${error.message}`;
-        console.error('Error intercepted:', errorMsg);
-
-        switch (error.status) {
-          case 401:
-            this.router.navigate(['/login']);
-            break;
-          case 403:
-            this.router.navigate(['/login']);
-            break;
-          case 404:
-            this.router.navigate(['/not-found']);
-            break;
-          case 429:
-            this.router.navigate(['/rate-limit-exceeded']);
-            break;
-          case 500:
-            this.router.navigate(['/server-error']);
-            break;
-          default:
-            this.router.navigate(['/not-found']);
-            break;
+        if (error.status === 401) {
+          return this.handle401Error(modifiedReq, next);
         }
+        let errorMsg = `Error Code: ${error.status}, Message: ${error.message}`;
+        console.error('Error intercepted:', errorMsg);
+        this.handleErrorNavigation(error.status);
         return observableThrowError(() => new Error(errorMsg));
       })
     );
+  }
+
+  private handle401Error(
+    req: HttpRequest<any>,
+    next: HttpHandler
+  ): Observable<HttpEvent<any>> {
+    return this.http
+      .post(
+        `${this.apiUrl}/api/auth/refresh-token`,
+        {},
+        { withCredentials: true }
+      )
+      .pipe(
+        switchMap(() => {
+          return next.handle(
+            req.clone({
+              withCredentials: true,
+            })
+          );
+        }),
+        catchError((error: HttpErrorResponse) => {
+          this.router.navigate(['/login']);
+          return observableThrowError(() => new Error(error.message));
+        })
+      );
+  }
+
+  private handleErrorNavigation(status: number) {
+    switch (status) {
+      case 403:
+        this.router.navigate(['/login']);
+        break;
+      case 404:
+        this.router.navigate(['/not-found']);
+        break;
+      case 429:
+        this.router.navigate(['/rate-limit-exceeded']);
+        break;
+      case 500:
+        this.router.navigate(['/server-error']);
+        break;
+      default:
+        this.router.navigate(['/not-found']);
+        break;
+    }
   }
 }

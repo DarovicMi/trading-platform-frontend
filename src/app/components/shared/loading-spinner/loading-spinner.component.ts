@@ -1,0 +1,14 @@
+import { CommonModule } from '@angular/common';
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'cc-loading-spinner',
+  standalone: true,
+  imports: [CommonModule],
+  templateUrl: './loading-spinner.component.html',
+  styleUrl: './loading-spinner.component.scss',
+})
+export class LoadingSpinnerComponent {
+  @Input() loading: boolean = false;
+  @Input() value?: any;
+}

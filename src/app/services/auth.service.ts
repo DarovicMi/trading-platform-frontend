@@ -1,10 +1,18 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from '../../environments/environment';
-import { Observable, map, tap, BehaviorSubject, catchError } from 'rxjs';
+import {
+  Observable,
+  map,
+  tap,
+  BehaviorSubject,
+  catchError,
+  throwError,
+} from 'rxjs';
 import { Router } from '@angular/router';
 import { CsrfService } from './csrf.service';
 import { User } from '../entities/User';
+import { HttpErrorResponse } from '@angular/common/http';
 @Injectable({
   providedIn: 'root',
 })
@@ -40,7 +48,15 @@ export class AuthService {
       .pipe(
         tap((_) => this.loggedIn.next(true)),
         catchError((error) => {
-          throw 'Failed to log in: ' + error;
+          let errorMessage = 'Failed to log in';
+          if (error.error && error.error.message) {
+            errorMessage = error.error.message;
+          } else if (error.status && error.message) {
+            errorMessage = `Error Code: ${error.status}, Message: ${error.message}`;
+          } else {
+            errorMessage = 'An unknown error occurred';
+          }
+          return throwError(() => new Error(errorMessage));
         })
       );
   }
@@ -80,5 +96,13 @@ export class AuthService {
           throw 'Failed to determine login status: ' + error;
         })
       );
+  }
+
+  refreshJWT() {
+    return this.http.post(
+      `${this.apiUrl}/api/auth/refresh-token`,
+      {},
+      { withCredentials: true }
+    );
   }
 }

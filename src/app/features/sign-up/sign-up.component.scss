@@ -1,12 +1,21 @@
-.color-red {
-    color: red;
+.min-h-screen {
+    min-height: 100vh;
 }
 
-.relative .error-message {
-    position: absolute;
-    right: -3rem;
-    top: 0;
-    width: 50%;
-    font-size: 0.60rem;
-    color: red;
+.container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.bg-white {
+    max-height: 100vh;
+    overflow-y: auto;
+    width: 90%;
+}
+
+form {
+    max-height: 90vh;
+    overflow-y: auto;
 }

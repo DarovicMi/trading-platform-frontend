@@ -1,390 +1,152 @@
-<section class="bg-gray-900 p-24 relative">
-    <div class="font-[sans-serif] text-gray-800  max-w-4xl flex items-center mx-auto md:h-screen p-4 relative z-0">
-        <div *ngIf="isFormSubmitted"
-            class="w-50 top-14 right-10 absolute flex items-center p-2 mb-4 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400"
-            role="alert">
-            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true" xmlns="http://www.w3.org/2000/svg"
-                fill="currentColor" viewBox="0 0 20 20">
-                <path
-                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-            </svg>
-            <span class="sr-only">Info</span>
-            <div>
-                <span class="font-medium">Your account</span> has been created, please check your mail inbox to activate
-                it.
-            </div>
-        </div>
-        <div
-            class="grid md:grid-cols-3 items-center shadow-[0_2px_10px_-3px_rgba(6,81,237,0.3)] rounded-xl overflow-visible">
-            <div
-                class="max-md:order-1 flex flex-col justify-center space-y-16 max-md:mt-16 min-h-full bg-gradient-to-r from-gray-900 lg:px-8 px-4 py-4">
-                <div>
-                    <h4 class="text-white text-lg font-semibold">Create Your Account</h4>
-                    <p class="text-[13px] text-white mt-2">Welcome to our registration page! Get started by creating
-                        your
-                        account.</p>
-                </div>
-                <div>
-                    <h4 class="text-white text-lg font-semibold">Simple & Secure Registration</h4>
-                    <p class="text-[13px] text-white mt-2">Our registration process is designed to be straightforward
-                        and
-                        secure. We prioritize your privacy and data security.</p>
+<section class="bg-gray-50 dark:bg-gray-900 min-h-screen flex items-center justify-center">
+    <div class="container mx-auto max-w-4xl">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg">
+            <div class="flex justify-between items-center mb-6">
+                <div class="flex flex-col gap-3">
+                    <h1 class="text-3xl font-bold text-gray-800 dark:text-white">Create Your Account</h1>
+                    <p class="text-sm text-gray-600 dark:text-gray-400">Welcome to our registration page! Get started by
+                        creating your account.</p>
+                    <img src="../../../assets/logo/svg/logo-no-background.svg" alt="CashCraft Logo" class="w-80">
                 </div>
             </div>
-            <form class="md:col-span-2 max-w-full max-h-full py-6 px-6 sm:px-16 bg-white" [formGroup]="signupForm"
-                (ngSubmit)="onSubmit()">
-                <div class="mb-20">
-                    <img src="../../../assets/logo/svg/logo-no-background.svg" alt="">
-                </div>
-                <div class="mb-6">
-                    <h3 class="text-2xl font-bold">Create an account</h3>
-                </div>
-                <div class="space-y-5">
+            <form class="space-y-4 md:space-y-6" [formGroup]="signupForm" (ngSubmit)="onSubmit()">
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
                     <div>
-                        <label class="text-sm mb-2 block">Username <span class="color-red">*</span></label>
-                        <div class="relative flex items-center">
-                            <input name="name" type="text" required
+                        <label class="text-sm mb-2 block">Username <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <input name="name" type="text" formControlName="username"
                                 class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500"
-                                placeholder="MiHigh" formControlName="username" maxlength="24" minlength="8" />
-                            <div *ngIf="signupForm.get('username')?.errors?.['required'] && signupForm.get('username')?.touched"
-                                class="error-message z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Username is a required field</span>
-                                </div>
+                                placeholder="MiHigh" maxlength="24" minlength="8" />
+                            <div *ngIf="signupForm.get('username')?.invalid && (signupForm.get('username')?.touched || signupForm.get('username')?.dirty)"
+                                class="text-red-600 text-sm mt-1">
+                                <div *ngIf="signupForm.get('username')?.errors?.['required']">{{
+                                    userValidation.signUp.requiredUsername }}</div>
+                                <div *ngIf="signupForm.get('username')?.errors?.['minlength']">{{
+                                    userValidation.common.minLength(userValidators.USERNAME_MIN_LENGTH)}}</div>
+                                <div *ngIf="signupForm.get('username')?.errors?.['maxlength']">{{
+                                    userValidation.common.maxLength(userValidators.USERNAME_MAX_LENGTH) }}</div>
                             </div>
-                            <div *ngIf="signupForm.get('username')?.errors?.['minlength'] && signupForm.get('username')?.touched"
-                                class="error-message z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Username minimum length not met</span>
-                                </div>
-                            </div>
-                            <div *ngIf="signupForm.get('username')?.errors?.['maxlength'] && signupForm.get('username')?.touched"
-                                class="error-message z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Username maximum length exceeded</span>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
-                                class="w-4 h-4 absolute right-4" viewBox="0 0 24 24">
-                                <circle cx="10" cy="7" r="6" data-original="#000000"></circle>
-                                <path
-                                    d="M14 15H6a5 5 0 0 0-5 5 3 3 0 0 0 3 3h12a3 3 0 0 0 3-3 5 5 0 0 0-5-5zm8-4h-2.59l.3-.29a1 1 0 0 0-1.42-1.42l-2 2a1 1 0 0 0 0 1.42l2 2a1 1 0 0 0 1.42 0 1 1 0 0 0 0-1.42l-.3-.29H22a1 1 0 0 0 0-2z"
-                                    data-original="#000000"></path>
-                            </svg>
                         </div>
                     </div>
                     <div>
-                        <label class="text-sm mb-2 block">Email <span class="color-red">*</span></label>
-                        <div class="relative flex items-center">
-                            <input name="email" type="email" required formControlName="email" minlength="3"
-                                maxlength="255"
+                        <label class="text-sm mb-2 block">Email <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <div class="hidden"><input type="email"></div>
+                            <input name="email" type="email" formControlName="email"
                                 class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500"
-                                placeholder="example@gmail.com" />
-                            <div *ngIf="signupForm.get('email')?.errors?.['required'] && signupForm.get('email')?.touched"
-                                class="error-message z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Email is a required field</span>
-                                </div>
+                                placeholder="example@gmail.com" minlength="3" maxlength="255" />
+                            <div *ngIf="signupForm.get('email')?.invalid && (signupForm.get('email')?.touched || signupForm.get('email')?.dirty)"
+                                class="text-red-600 text-sm mt-1">
+                                <div *ngIf="signupForm.get('email')?.errors?.['required']">{{
+                                    userValidation.signUp.requiredEmail }}</div>
+                                <div *ngIf="signupForm.get('email')?.errors?.['email']">{{
+                                    userValidation.signUp.invalidEmail }}</div>
+                                <div *ngIf="signupForm.get('email')?.errors?.['maxlength']">{{
+                                    userValidation.common.maxLength(userValidators.EMAIL_MAX_LENGTH) }}</div>
+                                <div *ngIf="signupForm.get('email')?.errors?.['minlength']">{{
+                                    userValidation.common.minLength(userValidators.EMAIL_MIN_LENGTH) }}</div>
                             </div>
-                            <div *ngIf="signupForm.get('email')?.errors?.['email'] && signupForm.get('email')?.touched"
-                                class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Email is not valid</span>
-                                </div>
-                            </div>
-                            <div *ngIf="signupForm.get('email')?.errors?.['maxlength'] && signupForm.get('email')?.touched"
-                                class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Maximum length exceeded for email</span>
-                                </div>
-                            </div>
-                            <div *ngIf="signupForm.get('email')?.errors?.['minlength'] && signupForm.get('email')?.touched"
-                                class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Minimum length not met for email</span>
-                                </div>
-                            </div>
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
-                                class="w-4 h-4 absolute right-4" viewBox="0 0 682.667 682.667">
-                                <defs>
-                                    <clipPath id="a" clipPathUnits="userSpaceOnUse">
-                                        <path d="M0 512h512V0H0Z" data-original="#000000"></path>
-                                    </clipPath>
-                                </defs>
-                                <g clip-path="url(#a)" transform="matrix(1.33 0 0 -1.33 0 682.667)">
-                                    <path fill="none" stroke-miterlimit="10" stroke-width="40"
-                                        d="M452 444H60c-22.091 0-40-17.909-40-40v-39.446l212.127-157.782c14.17-10.54 33.576-10.54 47.746 0L492 364.554V404c0 22.091-17.909 40-40 40Z"
-                                        data-original="#000000"></path>
-                                    <path
-                                        d="M472 274.9V107.999c0-11.027-8.972-20-20-20H60c-11.028 0-20 8.973-20 20V274.9L0 304.652V107.999c0-33.084 26.916-60 60-60h392c33.084 0 60 26.916 60 60v196.653Z"
-                                        data-original="#000000"></path>
-                                </g>
-                            </svg>
                         </div>
                     </div>
                     <div>
-                        <label class="text-sm mb-2 block">First Name <span class="color-red">*</span></label>
-                        <div class="relative flex items-center">
-                            <input name="firstName" type="text" required formControlName="firstName"
-                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-gray-600"
+                        <label class="text-sm mb-2 block">First Name <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <input name="firstName" type="text" formControlName="firstName"
+                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500"
                                 placeholder="Mihai" />
-                            <div *ngIf="signupForm.get('firstName')?.errors?.['required'] && signupForm.get('firstName')?.touched"
-                                class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">First Name is a required field</span>
-                                </div>
+                            <div *ngIf="signupForm.get('firstName')?.invalid && (signupForm.get('firstName')?.touched || signupForm.get('firstName')?.dirty)"
+                                class="text-red-600 text-sm mt-1">
+                                <div *ngIf="signupForm.get('firstName')?.errors?.['required']">{{
+                                    userValidation.signUp.requiredFirstName }}</div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <label class="text-sm mb-2 block">Last Name <span class="color-red">*</span></label>
-                        <div class="relative flex items-center flex-col">
-                            <input name="lastName" type="text" required formControlName="lastName"
-                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-gray-600"
+                        <label class="text-sm mb-2 block">Last Name <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <input name="lastName" type="text" formControlName="lastName"
+                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500"
                                 placeholder="Neamtiu" />
-                            <div *ngIf="signupForm.get('lastName')?.errors?.['required'] && signupForm.get('lastName')?.touched"
-                                class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Last Name is a required field</span>
-                                </div>
+                            <div *ngIf="signupForm.get('lastName')?.invalid && (signupForm.get('lastName')?.touched || signupForm.get('lastName')?.dirty)"
+                                class="text-red-600 text-sm mt-1">
+                                <div *ngIf="signupForm.get('lastName')?.errors?.['required']">{{
+                                    userValidation.signUp.requiredLastName }}</div>
                             </div>
                         </div>
                     </div>
                     <div>
-                        <label class="text-sm mb-2 block">Country <span class="color-red">*</span></label>
-                        <div class="relative flex items-center flex-col">
-                            <input name="country" type="text" required formControlName="country"
-                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-gray-600"
+                        <label class="text-sm mb-2 block">Country <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <input name="country" type="text" formControlName="country"
+                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500"
                                 placeholder="Romania" />
-                            <div *ngIf="signupForm.get('country')?.errors?.['required'] && signupForm.get('country')?.touched"
-                                class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Country is a required field</span>
-                                </div>
-                            </div>
-                            <div *ngIf="signupForm.get('country')?.errors?.['invalidCountry'] && signupForm.get('country')?.touched && signupForm.get('country')?.dirty"
-                                class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Invalid country, please enter a valid country.</span>
-                                </div>
+                            <div *ngIf="signupForm.get('country')?.invalid && (signupForm.get('country')?.touched || signupForm.get('country')?.dirty)"
+                                class="text-red-600 text-sm mt-1">
+                                <div *ngIf="signupForm.get('country')?.errors?.['required']">{{
+                                    userValidation.signUp.requiredCountry }}</div>
+                                <div *ngIf="signupForm.get('country')?.errors?.['invalidCountry']">{{
+                                    userValidation.signUp.invalidCountry }}</div>
                             </div>
                         </div>
-                    </div>
-                    <div class="relative">
-                        <label for="floating-phone-number" class="text-sm mb-2 block">Phone
-                            number <span class="color-red">*</span></label>
-                        <input type="phone" id="floating-phone-number" placeholder="123-456-7890"
-                            (focus)="onFocusPhoneNumber()" formControlName="phoneNumber"
-                            class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500" />
-                        <div *ngIf="signupForm.get('phoneNumber')?.errors?.['required'] && signupForm.get('phoneNumber')?.touched"
-                            class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                            role="alert">
-                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                            </svg>
-                            <span class="sr-only">Info</span>
-                            <div class="block">
-                                <span class="font-medium">Phone Number is a required field</span>
-                            </div>
-                        </div>
-                        <div *ngIf="signupForm.get('phoneNumber')?.errors?.['pattern'] && signupForm.get('phoneNumber')?.touched"
-                            class="error-message w-full z-40 flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                            role="alert">
-                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                            </svg>
-                            <span class="sr-only">Info</span>
-                            <div class="block">
-                                <span class="font-medium">Invalid phone number format</span>
-                            </div>
-                        </div>
-                        <span class="absolute end-3 bottom-3 text-gray-500 dark:text-gray-400">
-                            <svg class="w-4 h-4 rtl:rotate-[270deg]" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="#bbb" viewBox="0 0 19 18">
-                                <path
-                                    d="M18 13.446a3.02 3.02 0 0 0-.946-1.985l-1.4-1.4a3.054 3.054 0 0 0-4.218 0l-.7.7a.983.983 0 0 1-1.39 0l-2.1-2.1a.983.983 0 0 1 0-1.389l.7-.7a2.98 2.98 0 0 0 0-4.217l-1.4-1.4a2.824 2.824 0 0 0-4.218 0c-3.619 3.619-3 8.229 1.752 12.979C6.785 16.639 9.45 18 11.912 18a7.175 7.175 0 0 0 5.139-2.325A2.9 2.9 0 0 0 18 13.446Z" />
-                            </svg>
-                        </span>
                     </div>
                     <div>
-                        <label class="text-sm mb-2 block">Password <span class="color-red">*</span></label>
-                        <div class="relative flex items-center">
+                        <label class="text-sm mb-2 block">Phone number <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <input name="phoneNumber" type="text" (focus)="onFocusPhoneNumber()"
+                                formControlName="phoneNumber"
+                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500"
+                                placeholder="123-456-7890" />
+                            <div *ngIf="signupForm.get('phoneNumber')?.invalid && (signupForm.get('phoneNumber')?.touched || signupForm.get('phoneNumber')?.dirty)"
+                                class="text-red-600 text-sm mt-1">
+                                <div *ngIf="signupForm.get('phoneNumber')?.errors?.['required']">{{
+                                    userValidation.signUp.requiredPhoneNumber }}</div>
+                                <div *ngIf="signupForm.get('phoneNumber')?.errors?.['pattern']">{{
+                                    userValidation.signUp.invalidPhoneNumber }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <label class="text-sm mb-2 block">Password <span class="text-red-500">*</span></label>
+                        <div class="relative">
+                            <div class="hidden">
+                                <input type="password">
+                            </div>
                             <input name="password" [type]="hide ? 'password' : 'text'" formControlName="password"
-                                maxlength="16" minlength="8"
-                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-gray-600"
-                                placeholder="Enter your password" />
-                            <div *ngIf="signupForm.get('password')?.errors?.['required'] && signupForm.get('password')?.touched"
-                                class="error-message z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Password is a required field</span>
-                                </div>
-                            </div>
-                            <div *ngIf="signupForm.get('password')?.errors?.['minlength'] && signupForm.get('password')?.touched"
-                                class="error-message z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Password does not meet the minimum length</span>
-                                </div>
-                            </div>
-                            <div *ngIf="signupForm.get('password')?.errors?.['mxalength'] && signupForm.get('password')?.touched"
-                                class="error-message z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <span class="font-medium">Password exceeded maximum length</span>
-                                </div>
-                            </div>
-                            <div *ngIf="signupForm.get('password')?.errors?.['pattern'] && signupForm.get('password')?.touched"
-                                class="error-message z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                                role="alert">
-                                <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                    xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                    <path
-                                        d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                                </svg>
-                                <span class="sr-only">Info</span>
-                                <div class="block">
-                                    <div class="font-medium">Password needs to have Length between 8 and 16 characters.
-                                        At least one lowercase letter.
-                                        At least one uppercase letter.
-                                        At least one digit.
-                                        At least one special character or underscore.
-                                    </div>
-                                </div>
+                                class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500"
+                                placeholder="Enter your password" maxlength="16" minlength="8" />
+                            <div *ngIf="signupForm.get('password')?.invalid && (signupForm.get('password')?.touched || signupForm.get('password')?.dirty)"
+                                class="text-red-600 text-sm mt-1">
+                                <div *ngIf="signupForm.get('password')?.errors?.['required']">{{
+                                    userValidation.signUp.requiredPassword }}</div>
+                                <div *ngIf="signupForm.get('password')?.errors?.['pattern']">{{
+                                    userValidation.signUp.invalidPassword }}</div>
                             </div>
                             <svg (click)="toggleHide()" xmlns="http://www.w3.org/2000/svg" fill="#bbb" stroke="#bbb"
-                                class="w-4 h-4 absolute right-4 cursor-pointer" viewBox="0 0 128 128">
+                                class="w-4 h-4 absolute right-12 top-5 transform -translate-y-1/2 cursor-pointer"
+                                viewBox="0 0 128 128">
                                 <path
-                                    d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z"
-                                    data-original="#000000"></path>
+                                    d="M64 104C22.127 104 1.367 67.496.504 65.943a4 4 0 0 1 0-3.887C1.367 60.504 22.127 24 64 24s62.633 36.504 63.496 38.057a4 4 0 0 1 0 3.887C126.633 67.496 105.873 104 64 104zM8.707 63.994C13.465 71.205 32.146 96 64 96c31.955 0 50.553-24.775 55.293-31.994C114.535 56.795 95.854 32 64 32 32.045 32 13.447 56.775 8.707 63.994zM64 88c-13.234 0-24-10.766-24-24s10.766-24 24-24 24 10.766 24 24-10.766 24-24 24zm0-40c-8.822 0-16 7.178-16 16s7.178 16 16 16 16-7.178 16-16-7.178-16-16-16z" />
                             </svg>
                         </div>
-                    </div>
-                    <div class="flex items-center">
-                        <input id="termsAndConditions" name="termsAndConditions" type="checkbox"
-                            formControlName="termsAndConditions" required
-                            class="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
-                        <div *ngIf="signupForm.get('termsAndConditions')?.errors?.['required']"
-                            class="flex-column z-40 w-full flex items-center p-2 mb-4 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400"
-                            role="alert">
-                            <svg class="flex-shrink-0 inline w-4 h-4 me-3" aria-hidden="true"
-                                xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 20 20">
-                                <path
-                                    d="M10 .5a9.5 9.5 0 1 0 9.5 9.5A9.51 9.51 0 0 0 10 .5ZM9.5 4a1.5 1.5 0 1 1 0 3 1.5 1.5 0 0 1 0-3ZM12 15H8a1 1 0 0 1 0-2h1v-3H8a1 1 0 0 1 0-2h2a1 1 0 0 1 1 1v4h1a1 1 0 0 1 0 2Z" />
-                            </svg>
-                            <span class="sr-only">Info</span>
-                            <div class="block">
-                                <span class="font-medium">You must agree to our terms and conditions by checking the
-                                    box</span>
-                            </div>
-                        </div>
-                        <label for="termsAndConditions" class="ml-3 block text-sm">
-                            I accept the <a href="javascript:void(0);"
-                                class="text-blue-600 font-semibold hover:underline ml-1">Terms and Conditions <span
-                                    class="color-red">*</span></a>
-                        </label>
                     </div>
                 </div>
-                <div class="!mt-10 flex gap-5 items-center">
+                <div class="flex items-center mt-2">
+                    <input id="termsAndConditions" name="termsAndConditions" type="checkbox"
+                        formControlName="termsAndConditions"
+                        class="h-4 w-4 shrink-0 text-blue-600 focus:ring-blue-500 border-gray-300 rounded" />
+                    <div class="ml-2 text-sm">
+                        <label for="termsAndConditions" class="text-gray-500 dark:text-gray-300">I accept the
+                            <a href="javascript:void(0);" class="text-blue-600 font-semibold hover:underline">Terms
+                                and Conditions</a>
+                            <span class="text-red-500">*</span></label>
+                    </div>
+                    <div *ngIf="signupForm.get('termsAndConditions')?.invalid && (signupForm.get('termsAndConditions')?.touched || signupForm.get('termsAndConditions')?.dirty)"
+                        class="text-red-600 text-sm mt-1">
+                        <div *ngIf="signupForm.get('termsAndConditions')?.errors?.['required']">{{
+                            userValidation.signUp.requiredTerms }}</div>
+                    </div>
+                </div>
+                <div class="mt-6 flex gap-4 items-center">
                     <button type="submit"
                         class="w-full py-3 px-4 text-sm font-semibold rounded text-white bg-gray-700 hover:bg-gray-800 focus:outline-none">
                         Create an account
@@ -404,9 +166,9 @@
                     </div>
                 </div>
                 <p class="text-sm mt-6 text-center">Already have an account? <a routerLink="/login"
-                        class="text-blue-600 font-semibold hover:underline ml-1">Login here</a></p>
+                        class="text-blue-600 font-semibold hover:underline">Login here</a></p>
                 <p class="text-sm mt-6 text-center"><a routerLink="/dashboard"
-                        class="text-blue-600 font-semibold hover:underline ml-1">Back to dashboard &rarr;</a></p>
+                        class="text-blue-600 font-semibold hover:underline">Back to dashboard &rarr;</a></p>
             </form>
         </div>
     </div>

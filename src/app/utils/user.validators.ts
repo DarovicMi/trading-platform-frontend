@@ -10,5 +10,5 @@ export const UserValidators = {
   PASSWORD_MIN_LENGTH: 8,
   PASSWORD_MAX_LENGTH: 16,
 
-  PHONE_PATTERN: /^\+?(\d{10,12})$/,
+  PHONE_PATTERN: /^\+?(\d{11,12})$/,
 };

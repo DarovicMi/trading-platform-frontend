@@ -5,3 +5,11 @@
 .dropdown-right {
     left: 0;
 }
+
+.active {
+    --tw-text-opacity: 1;
+    color: rgb(26 86 219 / var(--tw-text-opacity));
+}
+.modal {
+    background-color: rgba(0,0,0,.4);
+}

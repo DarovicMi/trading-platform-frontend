@@ -1,0 +1,59 @@
+<cc-navbar></cc-navbar>
+<div class="min-h-screen bg-gray-100 dark:bg-gray-900 p-6">
+    <cc-loading-spinner [loading]="loading"></cc-loading-spinner>
+
+    <div *ngIf="!loading" class="container mx-auto">
+        <h1 class="text-3xl font-bold text-gray-800 dark:text-white mb-6">Transaction Report</h1>
+        <div class="overflow-x-auto bg-white dark:bg-gray-800 shadow rounded-lg">
+            <table class="min-w-full bg-white dark:bg-gray-800">
+                <thead>
+                    <tr>
+                        <th
+                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            Date
+                        </th>
+                        <th
+                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            Type
+                        </th>
+                        <th
+                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            Coin
+                        </th>
+                        <th
+                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            Amount
+                        </th>
+                        <th
+                            class="px-6 py-3 border-b border-gray-200 bg-gray-50 dark:bg-gray-700 dark:border-gray-600 text-left text-xs leading-4 font-medium text-gray-500 uppercase tracking-wider">
+                            Price
+                        </th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let transaction of transactions" class="hover:bg-gray-50 dark:hover:bg-gray-700">
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-600">
+                            {{ transaction.timestamp | date:'short' }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-600">
+                            <span
+                                [ngClass]="{'text-green-500': transaction.type === 'BUY', 'text-red-500': transaction.type === 'SELL'}">
+                                {{ transaction.type === 'BUY' ? 'PURCHASED' : 'SOLD' }}
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-600">
+                            {{ transaction.coin.name }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-600">
+                            {{ transaction.amount }}
+                        </td>
+                        <td class="px-6 py-4 whitespace-no-wrap border-b border-gray-200 dark:border-gray-600">
+                            ${{ transaction.price | number:'1.2-2' }}
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<cc-footer></cc-footer>

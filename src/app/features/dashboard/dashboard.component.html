@@ -1,7 +1,9 @@
 <cc-navbar></cc-navbar>
 
-<cc-guest-page *ngIf="!isLoggedIn"></cc-guest-page>
+<cc-loading-spinner [loading]="loading"></cc-loading-spinner>
 
-<cc-coin-chart *ngIf="isLoggedIn"></cc-coin-chart>
+<cc-guest-page *ngIf="!isLoggedIn && !loading"></cc-guest-page>
+
+<cc-coin-chart *ngIf="isLoggedIn && !loading"></cc-coin-chart>
 
 <cc-footer></cc-footer>

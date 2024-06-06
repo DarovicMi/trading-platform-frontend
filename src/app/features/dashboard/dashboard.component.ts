@@ -8,6 +8,9 @@ import { CoinService } from '../../services/coin.service';
 import { CoinChartComponent } from '../../components/shared/coin-chart/coin-chart.component';
 import { GuestPageComponent } from '../../components/shared/guest-page/guest-page.component';
 import { FooterComponent } from '../../components/layout/footer/footer.component';
+import { NotificationService } from '../../services/notification.service';
+import { Validation } from '../../utils/constants/user-validation';
+import { LoadingSpinnerComponent } from '../../components/shared/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-dashboard',
@@ -20,6 +23,7 @@ import { FooterComponent } from '../../components/layout/footer/footer.component
     CoinChartComponent,
     GuestPageComponent,
     FooterComponent,
+    LoadingSpinnerComponent,
   ],
   providers: [AuthService],
   templateUrl: './dashboard.component.html',
@@ -27,10 +31,11 @@ import { FooterComponent } from '../../components/layout/footer/footer.component
 })
 export class DashboardComponent implements OnInit {
   public isLoggedIn: boolean;
+  public loading: boolean = true;
 
   constructor(
     private authService: AuthService,
-    private coinService: CoinService
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -38,13 +43,18 @@ export class DashboardComponent implements OnInit {
   }
 
   isUserLoggedIn() {
-    this.authService.getLoggedInStatus().subscribe({
-      next: (loggedIn: boolean) => {
-        this.isLoggedIn = loggedIn;
-      },
-      error: (error: any) => {
-        console.error('Failed to check login status:', error);
-      },
-    });
+    setTimeout(() => {
+      this.loading = true;
+      this.authService.getLoggedInStatus().subscribe({
+        next: (loggedIn: boolean) => {
+          this.loading = false;
+          this.isLoggedIn = loggedIn;
+        },
+        error: () => {
+          this.loading = false;
+          this.notificationService.error(Validation.login.loginStatusFail);
+        },
+      });
+    }, 750);
   }
 }

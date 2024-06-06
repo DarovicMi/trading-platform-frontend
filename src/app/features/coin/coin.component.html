@@ -1,0 +1,68 @@
+<cc-loading-spinner [loading]="loading" [value]="coin"></cc-loading-spinner>
+
+<div *ngIf="coin && !loading" class="bg-white dark:bg-gray-800">
+    <div class="container mx-auto px-4 py-8 max-w-4xl">
+        <button (click)="goBack()"
+            class="mb-4 inline-flex items-center px-4 py-2 text-blue-600  rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:bg-blue-500 dark:hover:bg-blue-600">
+            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                xmlns="http://www.w3.org/2000/svg">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path>
+            </svg>
+            Back
+        </button>
+        <div class="mb-8 text-center">
+            <h1 class="text-4xl font-extrabold text-gray-900 dark:text-white mb-4">{{ coin.name }} ({{
+                coin.symbol.toUpperCase() }})</h1>
+            <img [src]="coin.image" alt="{{ coin.name }}"
+                class="w-32 h-32 mx-auto rounded-full border-4 border-gray-200 dark:border-gray-700 shadow-lg">
+        </div>
+
+        <div class="bg-white dark:bg-gray-700 p-6 rounded-lg shadow-lg">
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">Current Price</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">${{ coin.currentPrice | number }}</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">Market Cap</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">${{ coin.marketCap | number }}</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">24h High</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">${{ coin.high24h | number }}</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">24h Low</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">${{ coin.low24h | number }}</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">Total Volume</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">${{ coin.totalVolume | number }}</p>
+                </div>
+                <div class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">Circulating Supply</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">{{ coin.circulatingSupply | number }}
+                    </p>
+                </div>
+                <div *ngIf="coin.maxSupply" class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">Max Supply</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">{{ coin.maxSupply | number }}</p>
+                </div>
+                <div *ngIf="coin.ath" class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">All Time High</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">${{ coin.ath | number }}</p>
+                </div>
+                <div *ngIf="coin.atl" class="flex flex-col items-center">
+                    <p class="text-lg font-semibold text-gray-900 dark:text-white">All Time Low</p>
+                    <p class="text-xl font-bold text-blue-600 dark:text-blue-400">${{ coin.atl | number }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="coin && !loading" class="text-center flex items-center justify-center">
+    <cc-buy-crypto-currency-modal [coin]="coin"></cc-buy-crypto-currency-modal>
+</div>
+<div *ngIf="coin && !loading" class="chart-container">
+    <canvas id="coinChartCanvas"></canvas>
+</div>

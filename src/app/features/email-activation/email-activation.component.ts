@@ -1,10 +1,12 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { EmailService } from '../../services/email.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
 import { CommonModule } from '@angular/common';
-import { ElementRef } from '@angular/core';
 import { LocalStorageService } from '../../services/local-storage.service';
+import { NotificationService } from '../../services/notification.service';
+import { Validation } from '../../utils/constants/user-validation';
+
 @Component({
   selector: 'cc-email-activation',
   standalone: true,
@@ -21,11 +23,13 @@ export class EmailActivationComponent implements OnInit {
   public activationMessage: string;
   public errorMessage: string;
   public isActivationSuccessful: boolean = false;
+
   constructor(
     private emailService: EmailService,
     private route: ActivatedRoute,
     private router: Router,
-    private localStorageService: LocalStorageService
+    private localStorageService: LocalStorageService,
+    private notificationService: NotificationService
   ) {}
 
   ngOnInit(): void {
@@ -39,21 +43,25 @@ export class EmailActivationComponent implements OnInit {
         next: (data: { message: string }) => {
           this.activationMessage = data.message;
           this.isActivationSuccessful = true;
+          this.notificationService.success(this.activationMessage);
           this.redirectToLogin();
         },
-        error: (error: { error: { message: string } }) => {
-          this.errorMessage = error.error.message;
+        error: () => {
+          this.errorMessage = Validation.email.errorActivation;
+          1;
           this.isActivationSuccessful = false;
           this.isReissueTokenClicked = false;
+          this.notificationService.error(this.errorMessage);
         },
       });
     }
   }
 
   redirectToLogin() {
-    setInterval(() => {
+    const interval = setInterval(() => {
       this.countdown--;
       if (this.countdown === 0) {
+        clearInterval(interval);
         this.router.navigate(['/login']);
       }
     }, 1000);
@@ -66,11 +74,18 @@ export class EmailActivationComponent implements OnInit {
       this.emailService.reissueActivationToken(email).subscribe({
         next: (data: { message: string }) => {
           this.activationMessage = data.message;
+          this.notificationService.success(this.activationMessage);
         },
-        error: (error: { error: { message: string } }) => {
-          this.activationMessage = error.error.message;
+        error: () => {
+          this.activationMessage = Validation.email.reissueTokenNotExpired;
+          this.notificationService.error(this.activationMessage);
         },
       });
     }
+  }
+
+  closeAlert() {
+    this.isActivateClicked = false;
+    this.isReissueTokenClicked = false;
   }
 }

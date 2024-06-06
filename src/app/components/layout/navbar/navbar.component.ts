@@ -1,9 +1,15 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { AuthService } from '../../../services/auth.service';
 import { HttpClientModule } from '@angular/common/http';
 import { ClickOutsideDirective } from '../../../directives/click-outside.directive';
+import { NotificationService } from '../../../services/notification.service';
+import { Validation } from '../../../utils/constants/user-validation';
+import { User } from '../../../entities/User';
+import { UserService } from '../../../services/user.service';
+import { LoadingSpinnerComponent } from '../../shared/loading-spinner/loading-spinner.component';
+import { ModalComponent } from '../../shared/modal/modal.component';
 
 @Component({
   selector: 'cc-navbar',
@@ -13,6 +19,8 @@ import { ClickOutsideDirective } from '../../../directives/click-outside.directi
     HttpClientModule,
     RouterModule,
     ClickOutsideDirective,
+    LoadingSpinnerComponent,
+    ModalComponent,
   ],
   providers: [AuthService],
   templateUrl: './navbar.component.html',
@@ -23,8 +31,16 @@ export class NavbarComponent implements OnInit {
   public isDropdownOpen: boolean = false;
   public dropdownPosition: any;
   public userFullName: string;
+  public notification: string;
+  public user: User;
+  public isModalOpen = false;
+  public loading = false;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private notificationService: NotificationService,
+    private userService: UserService
+  ) {}
 
   ngOnInit(): void {
     this.getLoggedInStatus();
@@ -35,16 +51,27 @@ export class NavbarComponent implements OnInit {
       next: (isLoggedIn) => {
         this.isUserLoggedIn = isLoggedIn;
         this.getCurrentLoggedInUserName();
+        this.getCurrentLoggedInUser();
       },
-      error: (error) => console.error('Failed to get login status ', error),
+      error: () =>
+        this.notificationService.error(Validation.login.loginStatusFail),
     });
   }
 
   logout() {
-    this.authService.logout().subscribe({
-      error: (error) => console.error('Logout failed', error),
-      complete: () => console.log('Logout successful'),
-    });
+    this.loading = true;
+    setTimeout(() => {
+      this.authService.logout().subscribe({
+        next: () => {
+          this.loading = false;
+          this.notificationService.success(Validation.login.logout);
+        },
+        error: () => {
+          this.loading = false;
+          this.notificationService.error(Validation.login.failLogout);
+        },
+      });
+    }, 1000);
   }
 
   getCurrentLoggedInUserName() {
@@ -55,10 +82,26 @@ export class NavbarComponent implements OnInit {
     }
   }
 
+  getCurrentLoggedInUser() {
+    if (this.isUserLoggedIn) {
+      this.userService
+        .getCurrentLoggedInUser()
+        .subscribe((user) => (this.user = user));
+    }
+  }
+
   toggleDropdown(event: MouseEvent): void {
     this.isDropdownOpen = !this.isDropdownOpen;
     const screenWidth = window.innerWidth;
     const clickX = event.clientX;
     this.dropdownPosition = clickX > screenWidth / 2 ? 'left' : 'right';
+  }
+
+  openModal() {
+    this.isModalOpen = true;
+  }
+
+  closeModal() {
+    this.isModalOpen = false;
   }
 }

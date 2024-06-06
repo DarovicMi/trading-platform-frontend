@@ -25,7 +25,6 @@ export class CsrfInterceptor implements HttpInterceptor {
       return this.csrfService.getCsrfToken().pipe(
         take(1),
         switchMap((csrfToken) => {
-          console.log(csrfToken);
           const modifiedReq = req.clone({
             setHeaders: {
               'CSRF-TOKEN': csrfToken,
