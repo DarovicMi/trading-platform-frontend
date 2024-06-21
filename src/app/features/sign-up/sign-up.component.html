@@ -95,7 +95,7 @@
                             <input name="phoneNumber" type="text" (focus)="onFocusPhoneNumber()"
                                 formControlName="phoneNumber"
                                 class="bg-white border border-gray-300 w-full text-sm px-4 py-2.5 rounded-md outline-blue-500"
-                                placeholder="123-456-7890" />
+                                placeholder="+40742133409" />
                             <div *ngIf="signupForm.get('phoneNumber')?.invalid && (signupForm.get('phoneNumber')?.touched || signupForm.get('phoneNumber')?.dirty)"
                                 class="text-red-600 text-sm mt-1">
                                 <div *ngIf="signupForm.get('phoneNumber')?.errors?.['required']">{{
